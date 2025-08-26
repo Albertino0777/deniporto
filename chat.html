@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Chat with Putra Bryan</title>
+<style>
+  body {
+    margin: 0; padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: #222831;
+    color: #eeeeee;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+
+  header {
+    background-color: #393e46;
+    padding: 15px 20px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 24px;
+    color: #00adb5;
+    user-select: none;
+  }
+
+  #chat-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    overflow-y: auto;
+    gap: 10px;
+    background-color: #393e46;
+  }
+
+  .message {
+    max-width: 70%;
+    padding: 12px 16px;
+    border-radius: 20px;
+    font-size: 16px;
+    line-height: 1.3;
+    word-wrap: break-word;
+    user-select: text;
+  }
+
+  /* Message from user */
+  .message.user {
+    background-color: #00adb5;
+    color: #222831;
+    align-self: flex-end;
+    border-bottom-right-radius: 5px;
+  }
+
+  /* Message from "Putra" */
+  .message.bot {
+    background-color: #393e46;
+    border: 1px solid #00adb5;
+    color: #eeeeee;
+    align-self: flex-start;
+    border-bottom-left-radius: 5px;
+  }
+
+  #input-area {
+    background-color: #222831;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  #input-message {
+    flex: 1;
+    padding: 12px 15px;
+    border-radius: 25px;
+    border: none;
+    font-size: 16px;
+    outline: none;
+    background-color: #393e46;
+    color: #eeeeee;
+    user-select: text;
+  }
+
+  #input-message::placeholder {
+    color: #888;
+  }
+
+  #btn-send {
+    background-color: #00adb5;
+    border: none;
+    color: #222831;
+    padding: 12px 20px;
+    font-weight: 700;
+    font-size: 16px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  #btn-send:hover {
+    background-color: #008c94;
+  }
+
+  #btn-emote {
+    background-color: #00adb5;
+    border: none;
+    color: #222831;
+    padding: 10px 14px;
+    font-size: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    user-select: none;
+  }
+  #btn-emote:hover {
+    background-color: #008c94;
+  }
+
+  /* Emote picker */
+  #emote-picker {
+    position: absolute;
+    bottom: 60px;
+    right: 15px;
+    background-color: #393e46;
+    border-radius: 10px;
+    padding: 10px;
+    display: none;
+    flex-wrap: wrap;
+    max-width: 250px;
+    gap: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    z-index: 10;
+  }
+  #emote-picker span {
+    cursor: pointer;
+    font-size: 24px;
+    user-select: none;
+    transition: transform 0.15s;
+  }
+  #emote-picker span:hover {
+    transform: scale(1.3);
+  }
+
+  /* Scrollbar */
+  #chat-container::-webkit-scrollbar {
+    width: 6px;
+  }
+  #chat-container::-webkit-scrollbar-thumb {
+    background-color: #00adb5;
+    border-radius: 3px;
+  }
+  #chat-container::-webkit-scrollbar-track {
+    background-color: #222831;
+  }
+</style>
+</head>
+<body>
+
+<header>Chat with Putra Bryan</header>
+
+<div id="chat-container" aria-live="polite" aria-relevant="additions"></div>
+
+<div id="input-area">
+  <button id="btn-emote" aria-label="Open emoji picker" title="Emote">😊</button>
+  <input id="input-message" type="text" aria-label="Type your message" placeholder="Write a message..." autocomplete="off" />
+  <button id="btn-send" aria-label="Send message">Send</button>
+</div>
+
+<div id="emote-picker" role="list" aria-label="Emoji picker">
+  <!-- Emotes will be inserted here by JS -->
+</div>
+
+<script>
+  const chatContainer = document.getElementById('chat-container');
+  const inputMessage = document.getElementById('input-message');
+  const btnSend = document.getElementById('btn-send');
+  const btnEmote = document.getElementById('btn-emote');
+  const emotePicker = document.getElementById('emote-picker');
+
+  // Daftar emote (emoji)
+  const emotes = ['😀','😃','😄','😁','😆','😅','😂','🤣','😊','😍','😘','😜','🤪','😎','🤩','😏','🙄','😬','🤔','😴','😇','🤗','🤐','🤓','🥳'];
+
+  // Render emotes ke picker
+  emotes.forEach(e => {
+    const span = document.createElement('span');
+    span.textContent = e;
+    span.tabIndex = 0;
+    span.setAttribute('role', 'button');
+    span.setAttribute('aria-label', `Emoji ${e}`);
+    span.addEventListener('click', () => {
+      inputMessage.value += e;
+      inputMessage.focus();
+      toggleEmotePicker(false);
+    });
+    span.addEventListener('keydown', (ev) => {
+      if(ev.key === 'Enter' || ev.key === ' ') {
+        ev.preventDefault();
+        span.click();
+      }
+    });
+    emotePicker.appendChild(span);
+  });
+
+  // Toggle emote picker visibility
+  function toggleEmotePicker(show) {
+    if(show === undefined) {
+      emotePicker.style.display = emotePicker.style.display === 'flex' ? 'none' : 'flex';
+    } else {
+      emotePicker.style.display = show ? 'flex' : 'none';
+    }
+  }
+
+  btnEmote.addEventListener('click', () => {
+    toggleEmotePicker();
+  });
+
+  // Close emote picker if click outside
+  document.addEventListener('click', (e) => {
+    if(!emotePicker.contains(e.target) && e.target !== btnEmote) {
+      toggleEmotePicker(false);
+    }
+  });
+
+  // Fungsi menambahkan pesan ke chat
+  function addMessage(text, sender = 'user') {
+    const msg = document.createElement('div');
+    msg.classList.add('message', sender);
+    msg.textContent = text;
+    chatContainer.appendChild(msg);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+  }
+
+  // Fungsi simple balasan bot (Putra)
+  function botReply(userText) {
+    const lower = userText.toLowerCase();
+
+    let reply = "Maaf, saya tidak mengerti. Bisa ulangi?";
+    if(lower.includes('halo') || lower.includes('hi') || lower.includes('hai')) {
+      reply = "Halo! Ada yang bisa saya bantu?";
+    } else if(lower.includes('portofolio') || lower.includes('project')) {
+      reply = "Silakan cek portofolio saya di halaman utama.";
+    } else if(lower.includes('terima kasih') || lower.includes('thanks')) {
+      reply = "Sama-sama! Senang bisa membantu 😊";
+    } else if(lower.includes('emote') || lower.includes('emoji')) {
+      reply = "Gunakan tombol emoji di kiri untuk kirim emote ya!";
+    }
+
+    setTimeout(() => addMessage(reply, 'bot'), 800);
+  }
+
+  // Kirim pesan
+  function sendMessage() {
+    const text = inputMessage.value.trim();
+    if(text === '') return;
+    addMessage(text, 'user');
+    inputMessage.value = '';
+    toggleEmotePicker(false);
+    botReply(text);
+  }
+
+  btnSend.addEventListener('click', sendMessage);
+
+  inputMessage.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
+  // Fokus ke input saat load
+  inputMessage.focus();
+</script>
+
+</body>
+</html>

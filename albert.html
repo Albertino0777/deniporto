@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Putra Bryan Albertino - Portfolio</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: 'Poppins', sans-serif;
+    background-color: #222831; color: #eeeeee; line-height: 1.5;
+  }
+  a { color: #00adb5; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .container { display: flex; min-height: 100vh; }
+  aside {
+    width: 260px; background-color: #393e46;
+    padding: 30px 25px; display: flex; flex-direction: column; align-items: center;
+  }
+  main { flex: 1; padding: 40px 30px; }
+
+  /* Hiasan atas foto profil */
+  .top-bar {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    margin-bottom: 15px;
+    background: linear-gradient(90deg, #00adb5, #008c94);
+  }
+  .welcome {
+    font-size: 14px;
+    margin-bottom: 10px;
+    color: #b8c1ec;
+    text-align: center;
+  }
+
+  .profile-pic {
+    width: 120px; height: 120px; border-radius: 50%;
+    object-fit: cover; margin-bottom: 15px;
+    border: 3px solid #00adb5; user-select: none;
+  }
+  aside h1 { margin: 0 0 15px; font-size: 28px; color: #00adb5; }
+  aside p { margin: 0 0 20px; font-size: 14px; text-align: center; color: #b8c1ec; }
+
+  .skills { width: 100%; margin-top: 10px; }
+  .skills h3 {
+    margin-bottom: 12px; font-weight: 600; font-size: 18px;
+    border-bottom: 1px solid #00adb5; padding-bottom: 5px; text-align: center;
+  }
+  .skill-list {
+    display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+  }
+  .skill-badge {
+    background-color: #222831; color: #eeeeee;
+    font-size: 13px; font-weight: 500; padding: 6px 12px;
+    border-radius: 20px; border: 1px solid #00adb5;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  .skill-badge:hover { background-color: #00adb5; color: #222831; }
+
+  .social-links {
+    margin-top: auto; display: flex; gap: 15px; flex-wrap: wrap; justify-content: center;
+  }
+  .social-links a {
+    font-size: 20px; color: #00adb5;
+    transition: transform 0.3s, color 0.3s;
+    display: flex; align-items: center;
+  }
+  .social-links a:hover { transform: scale(1.2); }
+  .social-links svg { width: 22px; height: 22px; fill: #00adb5; transition: fill 0.3s; }
+  .social-links a.instagram:hover svg { fill: #e1306c; }
+  .social-links a.whatsapp:hover svg { fill: #25d366; }
+
+  main h2 { font-size: 32px; margin-bottom: 15px; color: #00adb5; }
+  main p { font-size: 18px; max-width: 600px; margin-bottom: 30px; color: #b8c1ec; }
+  .btn-talk {
+    background-color: #00adb5; border: none; padding: 12px 28px;
+    font-size: 18px; color: #222831; font-weight: 700;
+    border-radius: 25px; cursor: pointer; transition: background-color 0.3s;
+  }
+  .btn-talk:hover { background-color: #008c94; }
+
+  #portfolio { padding: 40px 30px; background-color: #393e46; }
+  #portfolio h2 { font-size: 28px; margin-bottom: 20px; color: #00adb5; text-align: center; }
+
+  /* Deskripsi singkat portfolio */
+  .portfolio-desc {
+    text-align: center; max-width: 700px; margin: 0 auto 25px auto;
+    font-size: 16px; color: #b8c1ec;
+  }
+
+  /* Statistik portfolio */
+  .portfolio-stats {
+    display: flex; justify-content: center; gap: 40px;
+    margin-bottom: 25px; flex-wrap: wrap;
+  }
+  .portfolio-stats div { text-align: center; }
+  .portfolio-stats h3 {
+    font-size: 24px; color: #00adb5; margin: 0;
+  }
+  .portfolio-stats p {
+    margin: 0; font-size: 14px; color: #b8c1ec;
+  }
+
+  .filter-buttons { display: flex; justify-content: center; gap: 15px; margin-bottom: 25px; }
+  .filter-btn {
+    background-color: #222831; border: none; color: #eeeeee;
+    padding: 10px 22px; border-radius: 25px; font-size: 16px;
+    cursor: pointer; font-weight: 600; transition: background-color 0.3s;
+  }
+  .filter-btn:hover { background-color: #00adb5; color: #222831; }
+  .filter-btn.active { background-color: #00adb5; color: #222831; }
+
+  .portfolio-grid {
+    display: grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+    gap: 20px; max-width: 1200px; margin: 0 auto;
+  }
+  .portfolio-item {
+    border-radius: 10px; overflow: hidden; background: #222831;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3); transition: transform 0.3s;
+    display: flex; flex-direction: column;
+  }
+  .portfolio-item:hover { transform: scale(1.05); }
+  .portfolio-item img { width: 100%; height: 180px; object-fit: cover; border-bottom: 2px solid #00adb5; }
+  .desc { padding: 12px 15px; background: #393e46; color: #eeeeee; flex-grow: 1; }
+  .desc h3 { margin: 0 0 6px; font-size: 20px; color: #00adb5; }
+  .desc p { margin: 0; font-size: 14px; line-height: 1.3; color: #b8c1ec; }
+
+  #experience { padding: 40px 30px; background-color: #222831; }
+  #experience h2 { font-size: 28px; margin-bottom: 20px; color: #00adb5; text-align: center; }
+  .experience-list {
+    max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px;
+  }
+  .experience-item {
+    background: #393e46; padding: 20px; border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  }
+  .experience-item h3 { margin: 0 0 10px; color: #00adb5; font-size: 20px; }
+  .experience-item p { margin: 0; color: #b8c1ec; font-size: 15px; line-height: 1.5; }
+
+  @media (max-width: 768px) {
+    .container { flex-direction: column; }
+    aside { width: 100%; flex-direction: column; justify-content: center; padding: 20px 10px; text-align: center; }
+    aside h1 { font-size: 22px; }
+    main { padding: 25px 15px; }
+    #portfolio, #experience { padding: 30px 15px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <aside>
+    <div class="top-bar"></div>
+    <p class="welcome">👋 Hi, welcome!</p>
+    <img src="lecler.jpg" alt="Foto Profil" class="profile-pic" />
+    <h1>Putra Bryan Albertino</h1>
+    <p>Front-end Developer & UI/UX Enthusiast</p>
+
+    <div class="skills">
+      <h3>Skills</h3>
+      <div class="skill-list">
+        <span class="skill-badge">HTML5</span>
+        <span class="skill-badge">CSS3</span>
+        <span class="skill-badge">JavaScript</span>
+        <span class="skill-badge">React.js</span>
+        <span class="skill-badge">Vue.js</span>
+        <span class="skill-badge">Figma</span>
+        <span class="skill-badge">Adobe XD</span>
+        <span class="skill-badge">Responsive Design</span>
+      </div>
+    </div>
+
+    <div class="social-links">
+      <a href="https://github.com/putrabryan" target="_blank">🐙</a>
+      <a href="https://linkedin.com/in/putrabryan" target="_blank">🔗</a>
+      <a href="mailto:putrabryan@example.com">✉️</a>
+      <a href="https://instagram.com/username" target="_blank" class="instagram">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9 ..."/></svg>
+      </a>
+      <a href="https://wa.me/6281234567890" target="_blank" class="whatsapp">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M380.9 97.1C339-44.1 205-36.7 ..."/></svg>
+      </a>
+    </div>
+  </aside>
+
+  <main>
+    <section class="intro" id="home">
+      <h2>Hello, I’m Putra Bryan Albertino</h2>
+      <p>Welcome to my personal portfolio website! I build engaging and interactive web experiences. Feel free to explore my projects below.</p>
+      <button class="btn-talk" onclick="window.location.href='chat.html'">Talk to Me</button>
+    </section>
+  </main>
+</div>
+
+<!-- Portfolio -->
+<section id="portfolio">
+  <h2>Portfolio</h2>
+  <p class="portfolio-desc">Berikut adalah beberapa proyek yang pernah saya kerjakan, mulai dari pengembangan website, desain UI/UX, hingga aplikasi interaktif.</p>
+
+  <div class="portfolio-stats">
+    <div><h3>10+</h3><p>Web Projects</p></div>
+    <div><h3>5+</h3><p>UI/UX Designs</p></div>
+    <div><h3>3+</h3><p>Mobile Apps</p></div>
+  </div>
+
+  <div class="filter-buttons">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="web">Web</button>
+    <button class="filter-btn" data-filter="uiux">UI/UX</button>
+  </div>
+
+  <div class="portfolio-grid">
+    <div class="portfolio-item" data-category="web">
+      <img src="https://source.unsplash.com/featured/?website,coding" alt="Web Project 1" />
+      <div class="desc"><h3>Web Project 1</h3><p>Website company profile dengan desain responsif.</p></div>
+    </div>
+    <div class="portfolio-item" data-category="uiux">
+      <img src="https://source.unsplash.com/featured/?ui,ux,design" alt="UI/UX Project 1" />
+      <div class="desc"><h3>UI/UX Project 1</h3><p>Prototype aplikasi mobile dengan antarmuka ramah pengguna.</p></div>
+    </div>
+    <div class="portfolio-item" data-category="web">
+      <img src="https://source.unsplash.com/featured/?ecommerce,web" alt="Web Project 2" />
+      <div class="desc"><h3>Web Project 2</h3><p>Situs e-commerce dengan integrasi payment gateway.</p></div>
+    </div>
+    <div class="portfolio-item" data-category="uiux">
+      <img src="https://source.unsplash.com/featured/?dashboard,uiux" alt="UI/UX Project 2" />
+      <div class="desc"><h3>UI/UX Project 2</h3><p>Desain dashboard untuk visualisasi data.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- Experience -->
+<section id="experience">
+  <h2>Pengalaman</h2>
+  <div class="experience-list">
+    <div class="experience-item">
+      <h3>PKL (Praktik Kerja Lapangan)</h3>
+      <p>Saya pernah melaksanakan PKL di <strong>[Nama Perusahaan/Instansi]</strong> selama <strong>[durasi]</strong>, dengan fokus pada <strong>[deskripsi singkat tugas]</strong>. Pengalaman ini mengajarkan saya tentang lingkungan kerja nyata, teamwork, serta penerapan ilmu yang telah saya pelajari.</p>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
